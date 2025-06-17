@@ -109,6 +109,10 @@ fn print_diff(record: &Record) {
 }
 
 fn is_matching_value(expected: &String, actual: &String) -> bool {
+    if actual.starts_with("*") {
+        return false;
+    }
+
     if expected.contains('*') {
         let expected_parts: Vec<&str> = expected.split('*').collect();
         return actual.ends_with(expected_parts[1]);
@@ -138,6 +142,10 @@ mod tests {
         assert!(!is_matching_value(
             &"exact.com".to_string(),
             &"different.com".to_string()
+        ));
+        assert!(!is_matching_value(
+            &"*.example.com".to_string(),
+            &"*.example.com".to_string()
         ));
     }
 }
