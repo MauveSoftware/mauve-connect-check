@@ -50,10 +50,11 @@ fn print_check_result(domain: &String, result: &CheckResult) {
     println!("Domain: {}", domain.cyan());
     print!("Status: ");
 
-    match result.success {
-        true => println!("{}", "success".green()),
-        false => println!("{}", "fail".red()),
-    };
+    if result.success {
+        println!("{}", "success".green());
+    } else {
+        println!("{}", "fail".red());
+    }
 
     result.records.iter().for_each(|record| {
         println!();
