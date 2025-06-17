@@ -1,5 +1,4 @@
 use anyhow::{Context, Result};
-use std::error::Error;
 
 use crate::check_result::CheckResult;
 
