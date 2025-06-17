@@ -16,8 +16,18 @@ async fn main() {
     let domain = &args[1];
 
     match check_mauve_dns(domain).await {
-        Ok(result) => print_check_result(domain, &result),
-        Err(e) => eprintln!("Error: {}", e),
+        Ok(result) => {
+            print_check_result(domain, &result);
+            if result.success {
+                exit(0);
+            } else {
+                exit(-1);
+            }
+        }
+        Err(e) => {
+            eprintln!("Error: {}", e);
+            exit(2);
+        }
     }
 }
 
