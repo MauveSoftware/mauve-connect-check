@@ -3,6 +3,7 @@ mod check_result;
 use check_result::{CheckResult, Record};
 use colored::Colorize;
 use std::env;
+use std::error::Error;
 use std::process::exit;
 
 #[tokio::main]
@@ -31,18 +32,17 @@ async fn main() {
     }
 }
 
-async fn check_mauve_dns(domain: &String) -> Result<CheckResult, String> {
+async fn check_mauve_dns(domain: &String) -> Result<CheckResult, Box<dyn Error>> {
     let url = format!(
         "https://domain-manager.infra.mauve.cloud/api/dns/check/{}",
         domain
     );
-    let res = reqwest::get(url)
-        .await
-        .map_err(|e| format!("Error retrieving data: {}", e))?
-        .json::<CheckResult>()
-        .await
-        .map_err(|e| format!("Error parsing data: {}", e))?;
+    let resp = reqwest::get(url).await?;
+    if resp.status() != reqwest::StatusCode::OK {
+        return Err(format!("HTTP error: {}", resp.status()).into());
+    }
 
+    let res = resp.json::<CheckResult>().await?;
     Ok(res)
 }
 
