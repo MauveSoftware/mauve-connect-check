@@ -1,4 +1,4 @@
-use crate::check_result::{CheckResult, Record};
+use crate::check_result::{CheckResult, Kind, Record};
 use colored::Colorize;
 
 pub fn print_check_result(domain: &String, result: &CheckResult) {
@@ -18,7 +18,7 @@ pub fn print_check_result(domain: &String, result: &CheckResult) {
 }
 
 fn print_record(record: &Record) {
-    println!("{} {}", record.type_name.bold(), record.name.cyan());
+    println!("{} {}", record.kind.as_str().bold(), record.name.cyan());
     print!("Status:");
 
     if record.passed {
@@ -39,7 +39,7 @@ fn print_record(record: &Record) {
 }
 
 fn print_diff(record: &Record) {
-    if record.legacy && record.type_name == "CNAME" {
+    if record.legacy && record.kind == Kind::CNAME {
         return;
     }
 
@@ -49,10 +49,11 @@ fn print_diff(record: &Record) {
         let find_res = actual.iter().position(|a| is_matching_value(exp_val, a));
         match find_res {
             Some(idx) => {
-                println!("  {}: {}", exp_val.green(), "ok");
+                let val = actual[idx].clone();
+                println!("  {}: {}", val.green(), "ok");
                 actual.remove(idx);
             }
-            None if record.type_name == "AAAA" => {
+            None if record.kind == Kind::AAAA => {
                 println!("  {}: {}", exp_val.magenta(), "not found");
             }
             None => {
