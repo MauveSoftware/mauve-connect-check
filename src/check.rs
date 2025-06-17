@@ -5,7 +5,7 @@ use crate::check_result::CheckResult;
 
 const BASE_URL: &str = "https://domain-manager.infra.mauve.cloud/api/dns/check/";
 
-pub async fn check_mauve_dns(domain: &String) -> Result<CheckResult, Box<dyn Error>> {
+pub async fn check_mauve_dns(domain: &String) -> Result<CheckResult> {
     let url = format!("{}{}", BASE_URL, domain);
     let resp = reqwest::get(url).await.context("unable to reach service")?;
     if resp.status() != reqwest::StatusCode::OK {
@@ -14,7 +14,7 @@ pub async fn check_mauve_dns(domain: &String) -> Result<CheckResult, Box<dyn Err
         if let Ok(body) = resp.text().await {
             err_msg += &format!("\n{}", body);
         }
-        return Err(err_msg.into());
+        return Err(anyhow::anyhow!(err_msg).context("service returned an error"));
     }
 
     let res = resp
