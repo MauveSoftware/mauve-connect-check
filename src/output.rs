@@ -1,7 +1,7 @@
 use crate::check_result::{CheckResult, Kind, Record};
 use colored::Colorize;
 
-pub fn print_check_result(domain: &String, result: &CheckResult) {
+pub fn print_check_result(domain: &str, result: &CheckResult) {
     println!("Domain: {}", domain.cyan());
     print!("Status: ");
 
@@ -50,24 +50,24 @@ fn print_diff(record: &Record) {
         match find_res {
             Some(idx) => {
                 let val = actual[idx].clone();
-                println!("  {}: {}", val.green(), "ok");
+                println!("  {}: ok", val.green());
                 actual.remove(idx);
             }
             None if record.kind == Kind::AAAA => {
-                println!("  {}: {}", exp_val.magenta(), "not found");
+                println!("  {}: not found", exp_val.magenta());
             }
             None => {
-                println!("  {}: {}", exp_val.red(), "not found");
+                println!("  {}: not found", exp_val.red());
             }
         }
     });
 
     for a in actual {
-        println!("  {}: {}", a.red(), "unexpected");
+        println!("  {}: unexpected", a.red());
     }
 }
 
-fn is_matching_value(expected: &String, actual: &String) -> bool {
+fn is_matching_value(expected: &str, actual: &str) -> bool {
     if actual.starts_with("*") {
         return false;
     }
@@ -86,29 +86,11 @@ mod tests {
 
     #[test]
     fn test_is_matching_value() {
-        assert!(is_matching_value(
-            &"*.example.com".to_string(),
-            &"sub.example.com".to_string()
-        ));
-        assert!(!is_matching_value(
-            &"*.example.com".to_string(),
-            &"example.com".to_string()
-        ));
-        assert!(is_matching_value(
-            &"exact.com".to_string(),
-            &"exact.com".to_string()
-        ));
-        assert!(!is_matching_value(
-            &"exact.com".to_string(),
-            &"different.com".to_string()
-        ));
-        assert!(!is_matching_value(
-            &"*.example.com".to_string(),
-            &"*.example.com".to_string()
-        ));
-        assert!(is_matching_value(
-            &"*.example.com".to_string(),
-            &"foo.bar.example.com".to_string()
-        ));
+        assert!(is_matching_value("*.example.com", "sub.example.com"));
+        assert!(!is_matching_value("*.example.com", "example.com"));
+        assert!(is_matching_value("exact.com", "exact.com"));
+        assert!(!is_matching_value("exact.com", "different.com"));
+        assert!(!is_matching_value("*.example.com", "*.example.com"));
+        assert!(is_matching_value("*.example.com", "foo.bar.example.com"));
     }
 }

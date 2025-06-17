@@ -10,7 +10,7 @@ pub async fn check_mauve_dns(domain: &String) -> Result<CheckResult, Box<dyn Err
     if resp.status() != reqwest::StatusCode::OK {
         let mut err_msg = format!("HTTP error: {}", resp.status());
 
-        if let Some(body) = resp.text().await.ok() {
+        if let Ok(body) = resp.text().await {
             err_msg += &format!("\n{}", body);
         }
         return Err(err_msg.into());

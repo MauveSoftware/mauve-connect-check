@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
+#[allow(clippy::upper_case_acronyms)]
 pub enum Kind {
     A,
     AAAA,
