@@ -147,5 +147,9 @@ mod tests {
             &"*.example.com".to_string(),
             &"*.example.com".to_string()
         ));
+        assert!(is_matching_value(
+            &"*.example.com".to_string(),
+            &"foo.bar.example.com".to_string()
+        ));
     }
 }
