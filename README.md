@@ -123,4 +123,4 @@ cargo test
 
 ## Author
 
-Daniel Brendgen-Czerwonk (@czerwonk)
+[Daniel Brendgen-Czerwonk](https://github.com/czerwonk)
