@@ -1,7 +1,7 @@
 use crate::check_result::{CheckResult, Kind, Record};
 use colored::Colorize;
 
-pub fn print_check_result(domain: &str, result: &CheckResult) {
+pub fn print_check_result(domain: &str, result: &CheckResult, verbose: bool) {
     println!("Domain: {}", domain.cyan());
     print!("Status: ");
 
@@ -9,6 +9,10 @@ pub fn print_check_result(domain: &str, result: &CheckResult) {
         println!("{}", "success".green());
     } else {
         println!("{}", "fail".red());
+    }
+
+    if result.success && !verbose {
+        return;
     }
 
     result.records.iter().for_each(|record| {

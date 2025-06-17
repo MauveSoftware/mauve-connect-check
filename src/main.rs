@@ -2,32 +2,48 @@ mod check;
 mod check_result;
 mod output;
 
-use std::env;
 use std::process::exit;
+
+use clap::{Arg, Command};
 
 use crate::check::check_mauve_dns;
 use crate::output::print_check_result;
 
 enum ExitCode {
-    MissingArgument = 1,
-    CheckError = 2,
     CheckPassed = 0,
-    CheckFailed = -1,
+    CheckError = 1,
+    CheckFailed = 2,
 }
 
 #[tokio::main]
 async fn main() {
-    let args: Vec<String> = env::args().collect();
+    let matches = Command::new("mauve-connect-check")
+        .version(env!("CARGO_PKG_VERSION"))
+        .author(env!("CARGO_PKG_AUTHORS"))
+        .about("Simple CLI tool to check for DNS configuratation issues")
+        .arg(
+            Arg::new("domain")
+                .help("The domain to process")
+                .required(true)
+                .index(1),
+        )
+        .arg(
+            Arg::new("verbose")
+                .short('v')
+                .long("verbose")
+                .help("Enable verbose output")
+                .action(clap::ArgAction::SetTrue),
+        )
+        .get_matches();
 
-    if args.len() != 2 {
-        eprintln!("Usage: {} <domain>", args[0]);
-        exit(ExitCode::MissingArgument as i32);
-    }
-    let domain = &args[1];
+    let domain = matches
+        .get_one::<String>("domain")
+        .expect("domain is required");
+    let verbose = matches.get_flag("verbose");
 
     match check_mauve_dns(domain).await {
         Ok(result) => {
-            print_check_result(domain, &result);
+            print_check_result(domain, &result, verbose);
             if result.success {
                 exit(ExitCode::CheckPassed as i32);
             } else {
