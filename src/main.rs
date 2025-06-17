@@ -102,6 +102,9 @@ fn print_diff(record: &Record) {
                 println!("  {}: {}", exp_val.green(), "ok");
                 actual.remove(idx);
             }
+            None if record.type_name == "AAAA" => {
+                println!("  {}: {}", exp_val.magenta(), "not found");
+            }
             None => {
                 println!("  {}: {}", exp_val.red(), "not found");
             }
