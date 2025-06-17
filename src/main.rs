@@ -81,8 +81,8 @@ fn print_record(record: &Record) {
         println!("{}", "incomplete".yellow());
     }
 
-    if record.legacy {
-        println!("{}", "not a CNAME".yellow());
+    if record.passed && record.legacy {
+        println!("{}", "deprecated: use CNAME instead".yellow());
     }
 
     print_diff(record);
@@ -103,13 +103,13 @@ fn print_diff(record: &Record) {
                 actual.remove(idx);
             }
             None => {
-                println!("  {}: {}", exp_val.red(), "not found".red());
+                println!("  {}: {}", exp_val.red(), "not found");
             }
         }
     });
 
     for a in actual {
-        println!("  {}: {}", a.red(), "unexpected".red());
+        println!("  {}: {}", a.red(), "unexpected");
     }
 }
 
