@@ -24,7 +24,7 @@ pub async fn check_mauve_dns(domain: &str) -> Result<CheckResult> {
         if let Ok(body) = resp.text().await {
             err_msg += &format!("\n{}", body);
         }
-        return Err(anyhow::anyhow!(err_msg).context("service returned an error"));
+        return Err(anyhow::anyhow!(err_msg));
     }
 
     let res = resp

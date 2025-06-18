@@ -1,12 +1,14 @@
 mod check;
 mod check_result;
+mod cli;
 mod output;
 
 use std::process::exit;
 
-use clap::{Arg, Command};
+use clap::Parser;
 
 use crate::check::check_mauve_dns;
+use crate::cli::Cli;
 use crate::output::print_check_result;
 
 enum ExitCode {
@@ -17,33 +19,12 @@ enum ExitCode {
 
 #[tokio::main]
 async fn main() {
-    let matches = Command::new("mauve-connect-check")
-        .version(env!("CARGO_PKG_VERSION"))
-        .author(env!("CARGO_PKG_AUTHORS"))
-        .about("Simple CLI tool to check for DNS configuratation issues")
-        .arg(
-            Arg::new("domain")
-                .help("The domain to process")
-                .required(true)
-                .index(1),
-        )
-        .arg(
-            Arg::new("verbose")
-                .short('v')
-                .long("verbose")
-                .help("Enable verbose output")
-                .action(clap::ArgAction::SetTrue),
-        )
-        .get_matches();
+    let args = Cli::parse();
 
-    let domain = matches
-        .get_one::<String>("domain")
-        .expect("domain is required");
-    let verbose = matches.get_flag("verbose");
-
+    let domain = &args.domain;
     match check_mauve_dns(domain).await {
         Ok(result) => {
-            print_check_result(domain, &result, verbose);
+            print_check_result(domain, &result, args.verbose);
             if result.success {
                 exit(ExitCode::CheckPassed as i32);
             } else {
