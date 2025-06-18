@@ -44,14 +44,7 @@ mauve-connect-check <domain>
 ### Examples
 
 ```bash
-# Check a single domain
-mauve-connect-check example.com
-
-# Check a subdomain
-mauve-connect-check api.example.com
-
-# Check a wildcard domain
-mauve-connect-check "*.example.com"
+mauve-connect-check --verbose example.com
 ```
 
 ## Exit Codes
@@ -59,9 +52,8 @@ mauve-connect-check "*.example.com"
 The tool uses different exit codes to indicate the result:
 
 - `0`: All checks passed
-- `-1`: One or more checks failed
-- `1`: Missing required argument
-- `2`: Error during check (network, API, etc.)
+- `1`: Error during check (network, API, etc.)
+- `2`: One or more checks failed
 
 ## Output Format
 
@@ -112,6 +104,7 @@ cargo test
 ### Dependencies
 
 - `anyhow`: Error handling
+- `clap`: CLI
 - `colored`: Terminal output colorization
 - `reqwest`: HTTP client for API calls
 - `serde` & `serde_json`: JSON serialization
