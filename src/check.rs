@@ -1,5 +1,6 @@
-use anyhow::{Context, Result};
 use std::time::Duration;
+
+use anyhow::{Context, Result};
 
 use crate::check_result::CheckResult;
 

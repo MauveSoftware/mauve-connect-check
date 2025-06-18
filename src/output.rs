@@ -1,5 +1,6 @@
-use crate::check_result::{CheckResult, Kind, Record};
 use colored::Colorize;
+
+use crate::check_result::{CheckResult, Kind, Record};
 
 pub fn print_check_result(domain: &str, result: &CheckResult, verbose: bool) {
     println!("Domain: {}", domain.cyan());
