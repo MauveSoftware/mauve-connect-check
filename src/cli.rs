@@ -3,7 +3,8 @@ use clap::Parser;
 #[derive(Parser)]
 #[command(version)]
 #[command(name = "mauve-connect-check")]
-#[command(about = "Simple CLI tool to check for DNS configuratation issues", long_about = None)]
+#[command(author = "Daniel Brendgen-Czerwonk")]
+#[command(about = "Simple CLI tool to check for DNS configuratation issues")]
 pub struct Cli {
     // The domain to process
     #[arg(required = true, index = 1)]
