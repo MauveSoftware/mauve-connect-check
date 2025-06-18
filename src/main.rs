@@ -14,7 +14,7 @@ use crate::output::print_check_result;
 enum ExitCode {
     CheckPassed = 0,
     CheckError = 1,
-    CheckFailed = 2,
+    CheckFailed = 3,
 }
 
 #[tokio::main]

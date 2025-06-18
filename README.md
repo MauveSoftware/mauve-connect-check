@@ -53,7 +53,8 @@ The tool uses different exit codes to indicate the result:
 
 - `0`: All checks passed
 - `1`: Error during check (network, API, etc.)
-- `2`: One or more checks failed
+- `2`: Missing or invalid argument
+- `3`: DNS for given domain is not correct
 
 ## Output Format
 
@@ -84,7 +85,6 @@ Status: passed
 Values:
   frontend.mauve.: ok
 
-```
 ```
 
 ## Development
